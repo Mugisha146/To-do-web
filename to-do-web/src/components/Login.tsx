@@ -11,6 +11,7 @@ const Login: React.FC = () => {
     try {
       await login(email, password);
       navigate("/tasks");
+      window.location.reload(); 
     } catch (error) {
       console.error("Error logging in", error);
     }
