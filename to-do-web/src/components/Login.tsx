@@ -10,7 +10,7 @@ const Login: React.FC = () => {
   const handleLogin = async () => {
     try {
       await login(email, password);
-      navigate("/tasks"); // Redirect to TaskList
+      navigate("/tasks");
     } catch (error) {
       console.error("Error logging in", error);
     }
