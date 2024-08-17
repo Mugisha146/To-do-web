@@ -2,11 +2,6 @@ import axios from "axios";
 
 const API_URL = "https://to-do-api-dgj1.onrender.com/api";
 
-export const login = async (email: string, password: string) => {
-  const response = await axios.post(`${API_URL}/login`, { email, password });
-  localStorage.setItem("token", response.data.token);
-};
-
 export const signup = async (
   email: string,
   password: string,
@@ -20,6 +15,12 @@ export const signup = async (
     lastName,
   });
 };
+
+export const login = async (email: string, password: string) => {
+  const response = await axios.post(`${API_URL}/login`, { email, password });
+  localStorage.setItem("token", response.data.token);
+};
+
 
 export const logout = () => {
   localStorage.removeItem("token");

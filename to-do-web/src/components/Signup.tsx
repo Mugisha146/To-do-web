@@ -12,7 +12,7 @@ const Signup: React.FC = () => {
   const handleSignup = async () => {
     try {
       await signup(email, password, firstName, lastName);
-      navigate("/login"); // Redirect to Login
+      navigate("/login"); 
     } catch (error) {
       console.error("Error signing up", error);
     }
