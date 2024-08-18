@@ -21,26 +21,26 @@ const Login: React.FC = () => {
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <input
         type="email"
-        className="border p-2 mb-4 w-full max-w-md"
+        className="border p-2 mb-4 rounded w-full max-w-md"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
       <input
         type="password"
-        className="border p-2 mb-4 w-full max-w-md"
+        className="border  rounded p-2 mb-4 w-full max-w-md"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
       <button
-        className="bg-blue-500 text-white p-2 w-full max-w-md"
+        className="bg-alice rounded-2xl text-begic p-2 w-full max-w-md"
         onClick={handleLogin}
       >
         Login
       </button>
       <button
-        className="text-blue-500 mt-4"
+        className="text-alice mt-4"
         onClick={() => navigate("/signup")}
       >
         Don't have an account? Sign up here
