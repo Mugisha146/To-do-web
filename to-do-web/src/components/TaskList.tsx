@@ -13,6 +13,7 @@ const TaskList: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState<string>("");
   const [newTaskDescription, setNewTaskDescription] = useState<string>("");
+const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     loadTasks();
@@ -28,6 +29,7 @@ const TaskList: React.FC = () => {
   };
 
   const handleCreateTask = async () => {
+    setLoading(true);
     try {
       await addTask(newTaskTitle, newTaskDescription);
       setNewTaskTitle("");
@@ -36,6 +38,7 @@ const TaskList: React.FC = () => {
     } catch (error) {
       console.error("Error creating task", error);
     }
+    setLoading(false);
   };
 
   const toggleComplete = async (id: number, completed: boolean) => {
@@ -71,65 +74,80 @@ const TaskList: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-4">
-      <input
-        type="text"
-        className="border p-2 mb-4 w-full rounded max-w-md"
-        placeholder="Task Title"
-        value={newTaskTitle}
-        onChange={(e) => setNewTaskTitle(e.target.value)}
-      />
-      <input
-        type="text"
-        className="border p-2 mb-4 w-full rounded max-w-md"
-        placeholder="Task Description"
-        value={newTaskDescription}
-        onChange={(e) => setNewTaskDescription(e.target.value)}
-      />
-      <button
-        className="bg-alice text-begic rounded-2xl p-2 w-full max-w-md"
-        onClick={handleCreateTask}
-      >
-        Create Task
-      </button>
-      <div className="w-full max-w-md mt-4">
-        {tasks.map((task) => (
-          <div
-            key={task.id}
-            className="flex justify-between text-gray-50 items-center mb-2"
-          >
-            <div>
-              <span
-                className={`text-lg ${task.completed ? "line-through" : ""}`}
-              >
-                {task.title}
-              </span>
-              <p className="text-gray-300">{task.description}</p>
-              <p className="text-gray-400 text-sm">
-                Created at: {new Date(task.createdAt).toLocaleString()}
-              </p>
-            </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="w-full max-w-md">
+        <h1 className="text-4xl font-bold text-gray-800 mb-4">Task Manager</h1>
+
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex-col">
+            <input
+              type="text"
+              className="w-full p-3 mb-2 border rounded-lg border-gray-300"
+              placeholder="Task Title"
+              value={newTaskTitle}
+              onChange={(e) => setNewTaskTitle(e.target.value)}
+            />
+            <input
+              type="text"
+              className="w-full p-3  mb-2 border rounded-lg border-gray-300"
+              placeholder="Task Description"
+              value={newTaskDescription}
+              onChange={(e) => setNewTaskDescription(e.target.value)}
+            />
             <button
-              className="bg-alice text-begic rounded-md p-1 mx-2"
-              onClick={() => toggleComplete(task.id, task.completed)}
+              onClick={handleCreateTask}
+              className={`w-full py-3 bg-gray-700 text-white font-bold rounded-lg transition mb-6 ${
+                loading ? "opacity-50" : ""
+              }`}
+              disabled={loading}
             >
-              {task.completed ? "Undo" : "Complete"}
+              {loading ? "Loading..." : "Add Task"}
             </button>
-            <button
-              className="bg-red-500 rounded-md text-white p-1"
-              onClick={() => handleDelete(task.id)}
-            >
-              Delete
-            </button>
+
+            {loading ? (
+              <div className="flex justify-center">
+                <div className="spinner-border text-warning" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              </div>
+            ) : (
+              <ul className="space-y-4">
+                {tasks.map((task) => (
+                  <li
+                    key={task.id}
+                    className="flex justify-between items-center p-4 bg-white shadow rounded-lg"
+                  >
+                    <div>
+                      <p className="text-xl font-bold text-gray-800">
+                        {task.title}
+                      </p>
+                      <p className="text-gray-600">{task.description}</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => toggleComplete(task.id, task.completed)}
+                        className={`px-4 py-2 rounded-lg ${
+                          task.completed
+                            ? "bg-green-500 text-white"
+                            : "bg-gray-300 text-gray-700"
+                        }`}
+                      >
+                        {task.completed ? "Completed" : "Complete"}
+                      </button>
+                      <button
+                        onClick={() => handleDelete(task.id)}
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-        ))}
+        </div>
       </div>
-      <button
-        className="bg-alice rounded-xl text-begic p-2 mt-4"
-        onClick={handleLogout}
-      >
-        Logout
-      </button>
     </div>
   );
 };
