@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../services/api";
+import Notification from "./Notification";
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -9,14 +10,23 @@ const Signup: React.FC = () => {
   const [lastName, setLastName] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
 
   const handleSignup = async () => {
     setLoading(true);
     try {
       await signup(email, password, firstName, lastName);
+      setNotification({
+        message: "User created successfully",
+        type: "success",
+      });
       navigate("/login"); 
     } catch (error) {
       console.error("Error signing up", error);
+      setNotification({ message: "Please Fill all field", type: "error" });
     }
     setLoading(false);
   };
@@ -72,6 +82,13 @@ const Signup: React.FC = () => {
           Log in here
         </a>
       </p>
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
     </div>
   );
 };

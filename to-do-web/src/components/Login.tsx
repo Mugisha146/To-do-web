@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/api";
+import Notification from "./Notification";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+   const [notification, setNotification] = useState<{
+     message: string;
+     type: "success" | "error" | "info";
+   } | null>(null);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -16,6 +21,7 @@ const Login: React.FC = () => {
       window.location.reload();
     } catch (error) {
       console.error("Error logging in", error);
+      setNotification({ message: "Incorrect Email or Password", type: "error" });
     }
     setLoading(false);
   };
@@ -54,6 +60,13 @@ const Login: React.FC = () => {
           Sign up here
         </a>
       </p>
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
     </div>
   );
 };
