@@ -140,20 +140,22 @@ const TaskList: React.FC = () => {
               key={task.id}
               className="flex flex-col justify-between items-center p-4 bg-white shadow rounded-lg"
             >
-              <div className="flex-1">
+              <div className="flex-1 flex-wrap">
                 <div className="flex items-center space-x-2">
                   <p
-                    className={`text-xl font-bold ${
+                    className={`text-xl font-bold break-all ${
                       task.completed
                         ? "line-through text-gray-500"
-                        : " text-gray-800"
+                        : " text-gray-800 break-all"
                     }`}
                   >
                     {task.title}
                   </p>
                 </div>
                 <div className="flex  items-center space-x-2">
-                  <p className="  text-gray-600">{task.description}</p>
+                  <p className="  text-gray-600 break-all">
+                    {task.description}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
